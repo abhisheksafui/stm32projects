@@ -1,7 +1,8 @@
 #include "stm32f10x_rcc.h"              // Keil::Device:StdPeriph Drivers:RCC
 
 
-volatile uint32_t tick=0;
+volatile uint32_t tick_ms=0;
+volatile uint32_t delay_count;
 
 void sysTickInit(uint32_t freq)
 {
@@ -12,16 +13,17 @@ void sysTickInit(uint32_t freq)
 
 
 void SysTick_Handler(){
-	tick++;
+	tick_ms++;
+	delay_count--;
 }
 
 uint32_t millis()
 {
-	return tick;
+	return tick_ms;
 }
 
 void delay(uint32_t time)
 {
-	uint32_t start_time = millis();
-	while(millis() - start_time < time);
+	delay_count = time;
+	while(delay_count);
 }
